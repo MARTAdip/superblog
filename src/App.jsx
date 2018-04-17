@@ -48,41 +48,41 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="container">
+        <div className="my-3">
+        <h2>List of all posts:</h2>
+        <ul className="list-group">
+
             {this.state.data.map((post, i) => 
-          <div key={i}> 
-                <li>
-                  {post.name}
-                </li>
-                <br /> 
-                <li>
-                  {post.content}
-                </li>
-                <br /> 
-                <li>
-                  {post.order}
-                </li>
-          </div>
+          <li className="list-group-key" key={i}> 
+                <h2>{post.name}</h2>
+                <p>{post.content}</p>
+                {/* <p>{post.order}</p> */}
+          </li>
+         
                 )}
-            <br />      
-          <form id="form" onSubmit={this.handleSubmit}> 
-            <div>  
-              <label>Name: </label>    
-                <input type="textarea" onChange={this.handleChange} id="name-input" />
+        </ul>         
+            <br />   
+          <h2>Create a post:</h2>     
+          <form  id="form" onSubmit={this.handleSubmit}> 
+            <div className="form-group">  
+              <label>Name: </label>     
+                <input  className="form-control" type="textarea" onChange={this.handleChange} id="name-input" />
             </div>    
                 <br />
-            <div>    
+            <div className="form-group">    
               <label>Content: </label>  
-                <input type="textarea" onChange={this.handleChange} id="content-input"  />
+                <input  className="form-control" type="textarea" onChange={this.handleChange} id="content-input"  />
             </div>    
                 <br />
-            <div>    
+            <div className="form-group">    
               <label>Order: </label>  
-                <input type="number" onChange={this.handleChange} id="order-input" />
+                <input  className="form-control" type="number" onChange={this.handleChange} id="order-input" />
             </div>    
-                <button onClick={(e) => this.handleChange(e)}>add post</button>
-          </form>     
-      </React.Fragment>
+                <button className="btn btn-primary" onClick={(e) => this.handleChange(e)}>add post</button>
+          </form>  
+        </div>     
+      </div>
     );
   }
 }

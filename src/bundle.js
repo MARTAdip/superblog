@@ -36959,11 +36959,15 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      data: [],
-      form: {}
+      posts: [],
+      form: {},
+      editing: null
     };
     _this.handleChange = _this.handleChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleDelete = _this.handleDelete.bind(_this);
+    _this.handleUpdate = _this.handleUpdate.bind(_this);
+    _this.handleEdit = _this.handleEdit.bind(_this);
     return _this;
   }
 
@@ -36977,7 +36981,7 @@ var App = function (_React$Component) {
       }).then(function (data) {
         console.log(data);
         _this2.setState({
-          data: data
+          posts: data
         });
       });
     }
@@ -37002,17 +37006,123 @@ var App = function (_React$Component) {
         fetch('http://localhost:5000/api/posts').then(function (resp) {
           return resp.json();
         }).then(function (posts) {
-          _this3.setState({ data: posts });
+          _this3.setState({ posts: posts });
         });
       }).catch(function (error) {
         console.log("Errooooor: ", error);
       });
     }
   }, {
-    key: 'render',
-    value: function render() {
+    key: 'handleUpdate',
+    value: function handleUpdate(e, post) {
       var _this4 = this;
 
+      e.preventDefault();
+      console.log(e);
+      _axios2.default.put('http://localhost:5000/api/posts/' + post._id, this.state.form).then(function (response) {
+        console.log("Slide edited successful: ", response);
+        fetch('http://localhost:5000/api/posts').then(function (resp) {
+          return resp.json();
+        }).then(function (posts) {
+          _this4.setState({ posts: posts, editing: null });
+        });
+      }).catch(function (error) {
+        console.log("Errooooor: ", error);
+      });
+    }
+  }, {
+    key: 'handleDelete',
+    value: function handleDelete(id) {
+      var _this5 = this;
+
+      _axios2.default.delete('http://localhost:5000/api/posts/' + id).then(function (response) {
+        console.log("Slide deleted successful: ", response);
+        fetch('http://localhost:5000/api/posts').then(function (resp) {
+          return resp.json();
+        }).then(function (posts) {
+          _this5.setState({ posts: posts });
+        });
+      }).catch(function (error) {
+        console.log("Error: ", error);
+      });
+    }
+  }, {
+    key: 'handleEdit',
+    value: function handleEdit(post) {
+      this.setState({
+        form: post,
+        editing: post
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this6 = this;
+
+      var posttemplate = this.state.posts.map(function (post, i) {
+        return _this6.state.editing && _this6.state.editing._id === post._id ? _react2.default.createElement(
+          'form',
+          { key: i, onSubmit: function onSubmit(e) {
+              return _this6.handleUpdate(e, post);
+            } },
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement(
+              'label',
+              { className: 'w-100' },
+              'Name:',
+              _react2.default.createElement('input', { className: 'form-control', type: 'textarea', defaultValue: _this6.state.editing.name, onChange: _this6.handleChange, id: 'name' })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement(
+              'label',
+              { className: 'w-100' },
+              'Content:',
+              _react2.default.createElement('input', { className: 'form-control', type: 'textarea', defaultValue: _this6.state.editing.content, onChange: _this6.handleChange, id: 'content' })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement(
+              'button',
+              { className: 'btn btn-primary', type: 'submit' },
+              'submit'
+            )
+          )
+        ) : _react2.default.createElement(
+          'li',
+          { className: 'list-group-key', key: i },
+          _react2.default.createElement(
+            'h2',
+            null,
+            post.name
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            post.content
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-danger', onClick: function onClick() {
+                return _this6.handleDelete(post._id);
+              } },
+            'Remove'
+          ),
+          _react2.default.createElement(
+            'button',
+            { className: 'btn btn-info', onClick: function onClick() {
+                return _this6.handleEdit(post);
+              } },
+            'Edit'
+          )
+        );
+      });
       return _react2.default.createElement(
         'div',
         { className: 'container' },
@@ -37023,26 +37133,6 @@ var App = function (_React$Component) {
             'h2',
             null,
             'List of all posts:'
-          ),
-          _react2.default.createElement(
-            'ul',
-            { className: 'list-group' },
-            this.state.data.map(function (post, i) {
-              return _react2.default.createElement(
-                'li',
-                { className: 'list-group-key', key: i },
-                _react2.default.createElement(
-                  'h2',
-                  null,
-                  post.name
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  post.content
-                )
-              );
-            })
           ),
           _react2.default.createElement('br', null),
           _react2.default.createElement(
@@ -37061,7 +37151,7 @@ var App = function (_React$Component) {
                 null,
                 'Name: '
               ),
-              _react2.default.createElement('input', { className: 'form-control', type: 'textarea', onChange: this.handleChange, id: 'name-input' })
+              _react2.default.createElement('input', { className: 'form-control', type: 'textarea', onChange: this.handleChange, id: 'name' })
             ),
             _react2.default.createElement('br', null),
             _react2.default.createElement(
@@ -37072,7 +37162,7 @@ var App = function (_React$Component) {
                 null,
                 'Content: '
               ),
-              _react2.default.createElement('input', { className: 'form-control', type: 'textarea', onChange: this.handleChange, id: 'content-input' })
+              _react2.default.createElement('input', { className: 'form-control', type: 'textarea', onChange: this.handleChange, id: 'content' })
             ),
             _react2.default.createElement('br', null),
             _react2.default.createElement(
@@ -37083,14 +37173,30 @@ var App = function (_React$Component) {
                 null,
                 'Order: '
               ),
-              _react2.default.createElement('input', { className: 'form-control', type: 'number', onChange: this.handleChange, id: 'order-input' })
+              _react2.default.createElement('input', { className: 'form-control', type: 'number', onChange: this.handleChange, id: 'order' })
             ),
             _react2.default.createElement(
               'button',
-              { className: 'btn btn-primary', onClick: function onClick(e) {
-                  return _this4.handleChange(e);
-                } },
+              { className: 'btn btn-primary', type: 'submit' },
               'add post'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'row' },
+          _react2.default.createElement(
+            'div',
+            { className: 'my-3' },
+            _react2.default.createElement(
+              'h2',
+              null,
+              'List of all posts:'
+            ),
+            _react2.default.createElement(
+              'ul',
+              { className: 'list-group' },
+              posttemplate
             )
           )
         )
@@ -37102,7 +37208,6 @@ var App = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = App;
-// defaultValue={this.state.data}
 
 /***/ }),
 /* 37 */

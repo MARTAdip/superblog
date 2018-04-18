@@ -38,12 +38,14 @@ class App extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(e)
+    let emptyNameString = document.getElementById('name').value = '';
+    let emptyContentString = document.getElementById('content').value = '';
     let addPostForm = this.state.form;
     axios.post(`http://localhost:5000/api/posts`, addPostForm).then(response => {
       console.log("Slide added successful: ", response);
         fetch(`http://localhost:5000/api/posts`).then( resp => resp.json()).then(posts => {
           this.setState({posts: posts});
+          M.toast({html: 'Post saved successfully!'})
       });
     }).catch(function(error){
       console.log("Errooooor: ", error);
@@ -58,6 +60,7 @@ class App extends React.Component {
       console.log("Slide edited successful: ", response);
       fetch(`http://localhost:5000/api/posts`).then(resp => resp.json()).then(posts => {
         this.setState({posts: posts, editing: null});
+        M.toast({html: 'Post updated successfully!'})
       });
     }).catch(function(error){
       console.log("Errooooor: ", error);
@@ -69,6 +72,7 @@ class App extends React.Component {
       console.log("Slide deleted successful: ", response);
       fetch(`http://localhost:5000/api/posts`).then(resp => resp.json()).then(posts => {
         this.setState({posts : posts});
+        M.toast({html: 'Post deleted successfully!'})
       });
     }).catch(function(error) {
       console.log("Error: ", error);
@@ -82,67 +86,81 @@ class App extends React.Component {
     })
   }
 
+  
+
   render() {
+    const divStyle = {
+      fontFamily : 'Roboto Mono'
+    }
     const posttemplate = this.state.posts.map((post, i) => 
-      this.state.editing && this.state.editing._id === post._id ? (
+        <div className="col s6 m6"  key={i}>
+    
+    {this.state.editing && this.state.editing._id === post._id ? (
           <form key={i} onSubmit={(e) => this.handleUpdate(e, post)}>
-            <div className="form-group">
+          <div className="z-depth-2 p-3">
+            <div className="form-group" style={divStyle} >
               <label className="w-100">
                 Name: 
-                <input  className="form-control" type="textarea" defaultValue={this.state.editing.name} onChange={this.handleChange} id="name" />
+                <input type="text"  defaultValue={this.state.editing.name} onChange={this.handleChange} id="name" />
               </label>
             </div>  
-            <div className="form-group">
+            <div >
               <label className="w-100">
                 Content: 
-                <input  className="form-control" type="textarea" defaultValue={this.state.editing.content} onChange={this.handleChange} id="content" />
+                <input type="text"  defaultValue={this.state.editing.content} onChange={this.handleChange} id="content" />
               </label>
             </div>  
             <div className="form-group">
-              <button className="btn btn-primary" type="submit">submit</button>
-            </div>  
+            <button className="waves-effect lime btn-flat" type="submit">submit</button>
+              </div> 
+              </div>  
+ 
           </form> 
       ) : (
-        <li className="list-group-key" key={i}> 
-                <h2>{post.name}</h2>
-                <p>{post.content}</p>
-                <button className="btn btn-danger" onClick={() => this.handleDelete(post._id)}>Remove</button>
-                <button className="btn btn-info" onClick={() => this.handleEdit(post)}>Edit</button>
-          </li>
-      )
+          <div className="p-3 z-depth-2">
+                  <h4 className="mt-0">{post.name}</h4>
+                  <p>{post.content}</p>
+                  <button className="btn waves-effect lime black-text text-darken-2" onClick={() => this.handleDelete(post._id)}>Remove</button>
+                  <button className="btn waves-effect lime black-text text-darken-2" onClick={() => this.handleEdit(post)}>Edit</button>
+      </div>    
+                  
+      )}
+      </div>    
 
     )
     return (
       <div className="container">
-        <div className="my-3">
-        <h2>List of all posts:</h2>
-         
+        <div className="my-3" style={divStyle}>
             <br />   
           <h2>Create a post:</h2>     
           <form  id="form" onSubmit={this.handleSubmit}> 
-            <div className="form-group">  
+            <div className="input-field col s6">  
               <label>Name: </label>     
-                <input  className="form-control" type="textarea" onChange={this.handleChange} id="name" />
+                <input  className="form-control" type="text" defaultValue={this.state.posts.name} onChange={this.handleChange} id="name" />
             </div>    
                 <br />
-            <div className="form-group">    
+            <div className="input-field col s6">    
               <label>Content: </label>  
-                <input  className="form-control" type="textarea" onChange={this.handleChange} id="content"  />
+                <input  className="form-control" type="text" defaultValue={this.state.posts.content} onChange={this.handleChange} id="content"  />
             </div>    
                 <br />
-            <div className="form-group">    
+            {/* <div className="input-field col s6">    
               <label>Order: </label>  
                 <input  className="form-control" type="number" onChange={this.handleChange} id="order" />
-            </div>    
-                <button className="btn btn-primary" type="submit">add post</button>
+            </div>   */}  
+                <button className="btn waves-effect lime black-text text-darken-2" type="submit">add post
+                  <i className="material-icons right">send</i>
+                </button>
           </form>  
-        </div>     
-          <div className="row">
+        </div>  
+        
+          <div className="row" style={divStyle}>
             <div className="my-3">
               <h2>List of all posts:</h2>
-              <ul className="list-group">
-                {posttemplate}
-              </ul>
+      <div className="row">
+      
+              {posttemplate}
+        </div>    
             </div>
           </div>
       </div>

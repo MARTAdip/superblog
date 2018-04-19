@@ -7,13 +7,16 @@ class App extends React.Component {
     this.state = {
       posts : [],
       form: {},
-      editing: null
+      editing: null,
+      searchFilter: ""
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.handleEdit = this.handleEdit.bind(this)
+    this.handleSearchInput = this.handleSearchInput.bind(this)
+    this.sortingOrder = this.sortingOrder.bind(this)
   }
 
   componentDidMount() {
@@ -40,6 +43,7 @@ class App extends React.Component {
     e.preventDefault();
     let emptyNameString = document.getElementById('name').value = '';
     let emptyContentString = document.getElementById('content').value = '';
+    let emptySearchString = document.getElementById('title').value = '';
     let addPostForm = this.state.form;
     axios.post(`http://localhost:5000/api/posts`, addPostForm).then(response => {
       console.log("Slide added successful: ", response);
@@ -51,7 +55,6 @@ class App extends React.Component {
       console.log("Errooooor: ", error);
     })
   }
-
 
   handleUpdate(e, post) {
     e.preventDefault();
@@ -85,8 +88,24 @@ class App extends React.Component {
       editing: post
     })
   }
-
   
+ 
+handleSearchInput(e)  {
+  let input = document.getElementById('title').addEventListener('keyup', (e) => {
+    console.log(e)
+    e.preventDefault();
+    //this.handleChange
+    /* let searchFiltered = searchFilter.filter(i => i.name.toLowerCase().includes(document.getElementById('title').value.toLowerCase())) */
+  })
+  let searchFilter = e.currentTarget.value;
+  this.setState({ searchFilter});
+  console.log(e);
+
+}
+sortingOrder() {
+  let order = this.state.posts.sort((a, b) => a.order - b.order)
+  this.setState({posts: order})
+}
 
   render() {
     const divStyle = {
@@ -108,6 +127,12 @@ class App extends React.Component {
               <label className="w-100">
                 Content: 
                 <input type="text"  defaultValue={this.state.editing.content} onChange={this.handleChange} id="content" />
+              </label>
+            </div> 
+            <div >
+              <label className="w-100">
+                Order: 
+                <input type="text"  defaultValue={this.state.editing.order} onChange={this.handleChange} id="order" />
               </label>
             </div>  
             <div className="form-group">
@@ -131,7 +156,10 @@ class App extends React.Component {
     return (
       <div className="container">
         <div className="my-3" style={divStyle}>
-            <br />   
+            <br />  
+          <div className="input-field col s12">
+            <input id="title" type="text" placeholder="search" onChange={this.handleSearchInput}/>
+          </div>    
           <h2>Create a post:</h2>     
           <form  id="form" onSubmit={this.handleSubmit}> 
             <div className="input-field col s6">  
@@ -144,10 +172,10 @@ class App extends React.Component {
                 <input  className="form-control" type="text" defaultValue={this.state.posts.content} onChange={this.handleChange} id="content"  />
             </div>    
                 <br />
-            {/* <div className="input-field col s6">    
+            <div className="input-field col s6">    
               <label>Order: </label>  
-                <input  className="form-control" type="number" onChange={this.handleChange} id="order" />
-            </div>   */}  
+                <input  className="form-control" type="number" defaultValue={this.state.posts.order} onChange={this.handleChange} id="order" />
+            </div>    
                 <button className="btn waves-effect lime black-text text-darken-2" type="submit">add post
                   <i className="material-icons right">send</i>
                 </button>
@@ -156,6 +184,7 @@ class App extends React.Component {
         
           <div className="row" style={divStyle}>
             <div className="my-3">
+              <button className="waves-effect waves-light btn-large" onClick={this.sortingOrder}>sort</button>
               <h2>List of all posts:</h2>
       <div className="row">
       

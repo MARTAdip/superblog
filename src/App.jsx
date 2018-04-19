@@ -89,31 +89,27 @@ class App extends React.Component {
     })
   }
   
- 
-handleSearchInput(e)  {
-  let input = document.getElementById('title').addEventListener('keyup', (e) => {
-    console.log(e)
-    e.preventDefault();
-    //this.handleChange
-    /* let searchFiltered = searchFilter.filter(i => i.name.toLowerCase().includes(document.getElementById('title').value.toLowerCase())) */
-  })
+ // reading the state
+handleSearchInput(e)  {            
   let searchFilter = e.currentTarget.value;
-  this.setState({ searchFilter});
-  console.log(e);
-
+  this.setState({ searchFilter: searchFilter});      
 }
+
 sortingOrder() {
   let order = this.state.posts.sort((a, b) => a.order - b.order)
   this.setState({posts: order})
 }
 
-  render() {
+render() {
     const divStyle = {
       fontFamily : 'Roboto Mono'
     }
-    const posttemplate = this.state.posts.map((post, i) => 
+
+    let posts = [...this.state.posts]
+    posts = posts.filter( i => i.name.toLowerCase().includes(this.state.searchFilter.toLowerCase()))
+
+    const posttemplate = posts.map((post, i) => 
         <div className="col s6 m6"  key={i}>
-    
     {this.state.editing && this.state.editing._id === post._id ? (
           <form key={i} onSubmit={(e) => this.handleUpdate(e, post)}>
           <div className="z-depth-2 p-3">
@@ -145,12 +141,13 @@ sortingOrder() {
           <div className="p-3 z-depth-2">
                   <h4 className="mt-0">{post.name}</h4>
                   <p>{post.content}</p>
+                  <p>{post.order}</p>
                   <button className="btn waves-effect lime black-text text-darken-2" onClick={() => this.handleDelete(post._id)}>Remove</button>
                   <button className="btn waves-effect lime black-text text-darken-2" onClick={() => this.handleEdit(post)}>Edit</button>
-      </div>    
+          </div>    
                   
       )}
-      </div>    
+        </div>    
 
     )
     return (
@@ -158,7 +155,7 @@ sortingOrder() {
         <div className="my-3" style={divStyle}>
             <br />  
           <div className="input-field col s12">
-            <input id="title" type="text" placeholder="search" onChange={this.handleSearchInput}/>
+            <input id="title" type="text" placeholder="search" onChange={this.handleSearchInput} defaultValue={this.state.searchFilter} />
           </div>    
           <h2>Create a post:</h2>     
           <form  id="form" onSubmit={this.handleSubmit}> 
@@ -184,12 +181,11 @@ sortingOrder() {
         
           <div className="row" style={divStyle}>
             <div className="my-3">
-              <button className="waves-effect waves-light btn-large" onClick={this.sortingOrder}>sort</button>
+              <button className="waves-effect lime darken-2 btn-large" onClick={this.sortingOrder}>sort</button>
               <h2>List of all posts:</h2>
-      <div className="row">
-      
+          <div className="row">
               {posttemplate}
-        </div>    
+          </div>    
             </div>
           </div>
       </div>

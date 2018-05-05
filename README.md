@@ -3,8 +3,8 @@
 This is a little node server with CRUD interface. It's a full-stack project along with an API server.
 The project consists in a blog, where i can write my posts, update them and delete them. There is also a sorting order functionality that helps me to place my posts by ascending order. 
 
-![Superblog](img/Superblog.png "Superblog")
-![screenshot](/img/Superblog.png)
+
+![screenshot](img/Superblog.png)
 
 
 # Installation

@@ -44,16 +44,19 @@ var config = {
 module.exports = config;
 ```
 4. Now i can install everthing from the terminal, with `npm install` or `npm i`
-5. We can create a `.gitignore` file, adding the `_node-modules
+5. We can create a `.gitignore` file, adding the `_node-modules` and the `.env` file
 
 
 
 
-Create a copy of env file: `cp .env.example .env`  and set your credentials. Eg:
+Create a copy of env file: `cp .env.example .env`  and set my credentials. Eg:
 ```
 PORT=5000
 MONGOURL=mongodb://localhost/superblog
 ```
+(i can decide the port where the magic happens :-) )
+
+
 # Start node server
 
 `node server/server.js`

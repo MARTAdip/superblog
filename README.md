@@ -1,7 +1,9 @@
 # Superblog API
 
-This is a little node server with CRUD interface:
-![Superblog](./Superblog.png?raw=true "Superblog")
+This is a little node server with CRUD interface
+
+
+![Superblog](/Superblog.png?raw=true "Superblog")
 
 
 

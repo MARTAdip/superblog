@@ -4,7 +4,7 @@ This is a little node server with CRUD interface. It's a full-stack project alon
 The project consists in a blog, where i can write my posts, update them and delete them. There is also a sorting order functionality that helps me to place my posts by ascending order. 
 
 
-![screenshot](img/Superblog.png)
+![superblog](/img/Superblog.png?raw=true "Superblog")
 
 
 # Installation

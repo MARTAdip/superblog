@@ -3,7 +3,7 @@
 This is a little node server with CRUD interface
 
 
-![Superblog](/Superblog.png?raw=true "Superblog")
+![Superblog](img/Superblog.png "Superblog")
 
 
 

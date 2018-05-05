@@ -1,6 +1,10 @@
 # Superblog API
 
-This is a little node server with CRUD interface:
+This is a little node server with CRUD interface
+
+
+![Superblog](img/Superblog.png "Superblog")
+
 
 
 # Installation

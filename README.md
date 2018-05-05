@@ -4,7 +4,7 @@ This is a little node server with CRUD interface
 
 
 ![Superblog](img/Superblog.png "Superblog")
-
+![screenshot](./img/Superblog.png)
 
 
 # Installation
